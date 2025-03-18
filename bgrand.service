@@ -1,0 +1,9 @@
+[Unit]
+Description=Background Image Randomizer
+After=network.target
+[Service]
+ExecStart=/home/matheus/.deno/bin/bgrand --dark
+Restart=always
+[Install]
+WantedBy=multi-user.target
+
