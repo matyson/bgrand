@@ -13,7 +13,7 @@ async function setBackgroundImage(image: string, dark = false) {
 
   const { stderr, success } = await command.output();
   if (!success) {
-    console.error(stderr);
+    console.error(new TextDecoder().decode(stderr));
   }
 }
 
