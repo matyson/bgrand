@@ -1,0 +1,7 @@
+dist/
+bin/
+node_modules/
+*.jpg
+*.png
+*.bin
+*.o
