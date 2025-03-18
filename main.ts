@@ -22,24 +22,24 @@ async function getImage() {
   return response.blob();
 }
 
-async function main() {
+async function main(dark = false) {
   const blob = await getImage();
   const home = Deno.env.get("HOME") ?? "";
   const name = "background.jpg";
   const image = home ? resolve(home, "Pictures", name) : name;
   console.log(`Downloading image to ${image}`);
   await Deno.writeFile(image, new Uint8Array(await blob.arrayBuffer()));
-  await setBackgroundImage(image, true);
+  await setBackgroundImage(image, dark);
 }
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
   const defaultInterval = 15; // minutes
   const flags = parseArgs(Deno.args, {
-    boolean: ["help"],
+    boolean: ["help", "dark"],
     string: ["time"],
     default: { time: defaultInterval.toString() },
-    alias: { help: "h", time: "t" },
+    alias: { help: "h", time: "t", dark: "d" },
   });
 
   if (flags.help) {
@@ -48,6 +48,7 @@ if (import.meta.main) {
     console.log("Options:");
     console.log("  -h, --help  Show this help message and exit");
     console.log("  -t, --time  Set the time interval in minutes");
+    console.log("  -d, --dark  Set the dark mode background");
     Deno.exit(0);
   }
 
@@ -56,6 +57,6 @@ if (import.meta.main) {
     console.error("Invalid interval time");
     Deno.exit(1);
   }
-  setInterval(main, interval * 60 * 1000);
-  main();
+  setInterval(() => main(flags.dark), interval * 60 * 1000);
+  main(flags.dark);
 }
